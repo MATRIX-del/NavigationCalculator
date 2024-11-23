@@ -1,0 +1,13 @@
+# created by virtualenv automatically
+*.doc
+*.docx
+*.log
+*.msg
+*.pages
+*.rtf
+*.txt
+*.wpd
+*.wps
+
+.venv
+.idea
