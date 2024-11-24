@@ -26,9 +26,10 @@ def get_html(id_1: str, id_2: str) -> str:
             "k": "1929218769"}
 
     try:
-        if requests.post(url, data=data).status_code == 200:
-            html = requests.post(url, data=data)
-            return html.text
+        r = requests.post(url, data=data)
+        if r.status_code == 200:
+            html = r.text
+            return html
     except Exception as error_code:
         raise error_code
 
@@ -39,22 +40,23 @@ def get_point(html: str) -> list[list[str]]:
     :param html:
     :return: Список, состоящий из списка строк со значениями точек
     """
-    points_path = []
+    points = []
     soup = Bs(html, 'html.parser')
-    path = (str(soup.find('pre'))).split('\n')[1:-1]
-    for i in path:
-        if len(i.split()) == 6:
-            modified_path = (
-                        i.split()[0] + " None " + ' '.join(i.split()[1:]).replace("'", "M").replace('"', 'S')).split()
-            points_path.append(modified_path)
-        else:
-            points_path.append(i.split())
-    return points_path
+    table = soup.find('pre').text.split('\n')[1:]
+    # TODO Создать массив из обьектов класса Fix
+    for i in table:
+        columns = i.split()
+        if len(columns) == 6:
+            column = columns[:1] + [None] + columns[1:]
+        points.append(column)
+    return points
 
 
-def main():
-    """
-    Функция для вывода
-    :return:
-    """
-    print(get_point(get_html('uuee', 'urml')))
+def get_points(icao1, icao2):
+    # html = get_html(icao1, icao2)
+    html = open('index.html').read()
+    points = get_point(html)
+    return points
+
+
+print(get_points(1, 1))
