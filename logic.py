@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as Bs
 
+from models import *
+
 
 def get_html(id_1: str, id_2: str) -> str:
     """
@@ -34,29 +36,33 @@ def get_html(id_1: str, id_2: str) -> str:
         raise error_code
 
 
-def get_point(html: str) -> list[list[str]]:
+def get_point(html: str) -> list[Fix]:
     """
-    Функция для получения пролетаемых точек
+    Функция для получения пролетаемых точек и их данных
     :param html:
-    :return: Список, состоящий из списка строк со значениями точек
+    :return: Список, состоящий из точек id_
     """
     points = []
     soup = Bs(html, 'html.parser')
-    table = soup.find('pre').text.split('\n')[1:]
+    table = soup.find('pre').text.split('\n')[1:-1]
     # TODO Создать массив из обьектов класса Fix
     for i in table:
         columns = i.split()
         if len(columns) == 6:
-            column = columns[:1] + [None] + columns[1:]
-        points.append(column)
+            columns.insert(1, None)
+        fix = Fix(*columns)
+        points.append(fix)
     return points
 
 
-def get_points(icao1, icao2):
+def get_points(icao1: str, icao2: str) -> list[Fix]:
+    """
+    Функция для вызова функций(debug)
+    :param icao1:
+    :param icao2:
+    :return:
+    """
     # html = get_html(icao1, icao2)
     html = open('index.html').read()
     points = get_point(html)
     return points
-
-
-print(get_points(1, 1))
