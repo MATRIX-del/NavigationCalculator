@@ -45,7 +45,6 @@ def get_point(html: str) -> list[Fix]:
     points = []
     soup = Bs(html, 'html.parser')
     table = soup.find('pre').text.split('\n')[1:-1]
-    # TODO Создать массив из обьектов класса Fix
     for i in table:
         columns = i.split()
         if len(columns) == 6:

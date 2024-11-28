@@ -8,6 +8,7 @@ def main():
     Функция для вывода
     :return:
     """
+    # TODO Миллион раз говорил, что так делать нельзя
     pprint((get_points('uuee', 'urml')), compact=True, width=105)
 
 
